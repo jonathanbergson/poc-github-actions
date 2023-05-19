@@ -2,7 +2,8 @@ name: Branch Release
 
 on:
   schedule:
-    - cron: '0 6 * * 1-4' # Every Monday to Thursday at 6am UTC - 3am BRT
+    # - cron: '0 6 * * 1-4' # Every Monday to Thursday at 6am UTC - 3am BRT
+    - cron: '0 6 * * *' # Every day at 6am UTC - 3am BRT
 
 jobs:
 #  delete-branch-release:
