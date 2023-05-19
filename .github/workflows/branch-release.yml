@@ -1,12 +1,11 @@
-name: Bump Version
+name: Branch Release
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '*/1 * * * *'
 
 jobs:
-  bump-version:
+  create-branch-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,16 +33,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "<>"
 
-      - name: Set Version
-        run: npm version ${{ fromJSON(steps.create-version.outputs.result) }} --no-git-tag-version --allow-same-version
-
-      - name: Push changes
+      - name: Create Git branch release
         run: |
-          git add package.json --ignore-errors
-          git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}" --allow-empty
-          git push origin main
-
-      - name: Create Git tag
-        run: |
-          git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}" -f
-          git push -f --tags
+          git checkout -b release/${{ fromJSON(steps.create-version.outputs.result) }}
+          git push origin release/${{ fromJSON(steps.create-version.outputs.result) }}
