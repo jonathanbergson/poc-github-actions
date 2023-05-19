@@ -1,0 +1,20 @@
+{
+  "name": "poc-github-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanbergson/poc-github-actions.git"
+  },
+  "keywords": [],
+  "author": "Jonathan Bergson <contato@bergson.me> (https://bergson.me/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonathanbergson/poc-github-actions/issues"
+  },
+  "homepage": "https://github.com/jonathanbergson/poc-github-actions#readme"
+}

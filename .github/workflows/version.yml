@@ -1,0 +1,19 @@
+name: Create Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Create Version
+        uses: ./.github/actions/create-version
+        with:
+          version: ${{ github.ref }}
