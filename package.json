@@ -1,6 +1,6 @@
 {
   "name": "poc-github-actions",
-  "version": "23.4.19-7de2c73",
+  "version": "23.4.19",
   "description": "",
   "main": "index.js",
   "scripts": {
