@@ -46,4 +46,4 @@ jobs:
       - name: Create Git tag
         run: |
           git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}" -f
-          git push --delete --tags
+          git push --delete origin v${{ fromJSON(steps.create-version.outputs.result) }}
