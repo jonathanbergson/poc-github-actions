@@ -29,9 +29,15 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-      - name: Create Git Tag
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Git config
         run: |
-          git config --global user.email "contato@bergson.me"
-          git config --global user.name "Jonathan Bergson"
-          git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}"  
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Create Git tag
+        run: |
+          git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}"
           git push origin :refs/tags/v${{ fromJSON(steps.create-version.outputs.result) }}
