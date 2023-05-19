@@ -1,4 +1,4 @@
-name: Create Version
+name: Bump Version
 
 on:
   push:
@@ -24,13 +24,10 @@ jobs:
               const month = currentDate.getMonth()
               const date = currentDate.getDate()
               const version = year + '.' + month + '.' + date
-              return version
+              return version + '--' + process.env.GITHUB_SHA.slice(0, 7)
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-
-      - name: Checkout Repo
-        uses: actions/checkout@v3
 
       - name: Setup Git config
         run: |
