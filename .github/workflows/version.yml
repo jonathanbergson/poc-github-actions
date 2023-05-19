@@ -41,7 +41,7 @@ jobs:
         run: |
           git add package.json --ignore-errors
           git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}"
-          git push origin main
+          git push origin main --quiet
 
       - name: Create Git tag
         run: |
