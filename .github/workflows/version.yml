@@ -24,14 +24,14 @@ jobs:
               const month = currentDate.getMonth()
               const date = currentDate.getDate()
               const version = year + '.' + month + '.' + date
-              return version + '-' + process.env.GITHUB_SHA.slice(0, 7)
+              return version
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
 
       - name: Setup Git config
         run: |
-          git config user.name "GitHub Actions Bot"
+          git config user.name "GitHub Actions"
           git config user.email "<>"
 
       - name: Set Version
@@ -40,7 +40,7 @@ jobs:
       - name: Push changes
         run: |
           git add package.json
-          git commit -m "ci: Bump version to v${{ fromJSON(steps.create-version.outputs.result) }}"
+          git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}"
           git push origin main
 
       - name: Create Git tag
