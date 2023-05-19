@@ -29,6 +29,15 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
+      - name: Set Version
+        run: npm version ${{ fromJSON(steps.create-version.outputs.result) }}
+
+      - name: Push changes
+        run: |
+          git add package.json
+          git commit -m "ci: Bump version to v${{ fromJSON(steps.create-version.outputs.result) }}"
+          git push origin main
+
       - name: Setup Git config
         run: |
           git config user.name "GitHub Actions Bot"
