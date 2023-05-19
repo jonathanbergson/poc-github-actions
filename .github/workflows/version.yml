@@ -40,8 +40,8 @@ jobs:
       - name: Push changes
         run: |
           git add package.json --ignore-errors
-          git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}" --quiet
-          git push origin main --quiet
+          git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}" --allow-empty
+          git push origin main
 
       - name: Create Git tag
         run: |
