@@ -35,7 +35,7 @@ jobs:
           git config user.email "<>"
 
       - name: Set Version
-        run: npm version ${{ fromJSON(steps.create-version.outputs.result) }} --no-git-tag-version
+        run: npm version ${{ fromJSON(steps.create-version.outputs.result) }} --no-git-tag-version --allow-same-version
 
       - name: Push changes
         run: |
