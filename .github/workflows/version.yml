@@ -31,5 +31,7 @@ jobs:
 
       - name: Create Git Tag
         run: |
+          git config --global user.email "contato@bergson.me"
+          git config --global user.name "Jonathan Bergson"
           git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}" -f 
           git push origin :refs/tags/v${{ fromJSON(steps.create-version.outputs.result) }}
