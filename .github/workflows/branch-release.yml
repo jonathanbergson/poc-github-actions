@@ -2,9 +2,20 @@ name: Branch Release
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
+    - cron: '0 6 * * 1-4' # Every Monday to Thursday at 6am UTC - 3am BRT
 
 jobs:
+#  delete-branch-release:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v3
+#
+#      - name: Delete Git branch release
+#        run: |
+#          git push origin --delete $(git branch -r --list '*/release/*')
+
   create-branch-release:
     runs-on: ubuntu-latest
 
@@ -35,5 +46,5 @@ jobs:
 
       - name: Create Git branch release
         run: |
-          git checkout -b release/${{ fromJSON(steps.create-version.outputs.result) }}
-          git push origin release/${{ fromJSON(steps.create-version.outputs.result) }}
+          git checkout -b release/v${{ fromJSON(steps.create-version.outputs.result) }}
+          git push origin release/v${{ fromJSON(steps.create-version.outputs.result) }}
