@@ -2,23 +2,23 @@ name: Branch Release
 
 on:
   schedule:
-    # - cron: '0 6 * * 1-4' # Every Monday to Thursday at 6am UTC - 3am BRT
-    - cron: '0 6 * * *' # Every day at 6am UTC - 3am BRT
+    - cron: '0 6 * * 1-4' # Every Monday to Thursday at 6am UTC - 3am BRT
 
 jobs:
-#  delete-branch-release:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v3
-#
-#      - name: Delete Git branch release
-#        run: |
-#          git push origin --delete $(git branch -r --list '*/release/*')
+  delete-branch-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Delete Git branch release
+        run: |
+          git branch -r --list '*/release/*' | sed 's/origin\///' | xargs -n 1 git push origin --delete
 
   create-branch-release:
     runs-on: ubuntu-latest
+    needs: delete-branch-release
 
     steps:
       - name: Checkout Repo
