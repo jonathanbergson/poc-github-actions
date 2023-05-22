@@ -32,6 +32,15 @@ jobs:
             const version = 'v${{ fromJSON(steps.create-version.outputs.result) }}'
             const { repo, owner } = context.repo;
 
+            core.error(JSON.stringify(context, null, 2));
+            core.error(JSON.stringify(github, null, 2));
+
+            const pullRequest = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: context.issue.number
+            });
+
             const result = await github.rest.pulls.create({
               title: `release | v${version} | merge in stage`,
               owner,
@@ -39,7 +48,7 @@ jobs:
               head: 'main',
               base: 'stage',
               body: [
-                github.event.pull_request.issue_comment,
+                pullRequest.data.body,
                 '',
                 '---',
                 '',
