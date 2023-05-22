@@ -20,6 +20,7 @@ jobs:
 
       - name: Update Git branch stage
         run: |
+          git fetch --all
           git checkout stage
           git merge main
           git push origin stage
