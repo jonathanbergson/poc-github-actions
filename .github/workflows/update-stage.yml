@@ -1,0 +1,25 @@
+name: Update Stage Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-stage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+
+      - name: Update Git branch stage
+        run: |
+          git checkout stage
+          git merge main
+          git push origin stage
