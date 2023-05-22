@@ -32,6 +32,9 @@ jobs:
             const version = v${{ fromJSON(steps.create-version.outputs.result) }}
             const { repo, owner } = context.repo;
 
+            core.debug(JSON.stringify(context, null, 2));
+            core.debug(JSON.stringify(github, null, 2));
+
             const pullRequest = await github.rest.pulls.get({
               owner,
               repo,
