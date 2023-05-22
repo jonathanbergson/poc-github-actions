@@ -1,4 +1,4 @@
-name: Update Stage Branch
+name: Update Branch Stage
 
 on:
   push:
@@ -21,6 +21,6 @@ jobs:
       - name: Update Git branch stage
         run: |
           git fetch --all
-          git checkout stage
+          git checkout origin/stage
           git merge main
           git push origin stage
