@@ -1,12 +1,15 @@
 name: Update Branch Stage
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
 jobs:
   update-stage:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
