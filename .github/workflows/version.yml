@@ -42,8 +42,12 @@ jobs:
           git add package.json --ignore-errors
           git commit -m "ci(bump-version): v${{ fromJSON(steps.create-version.outputs.result) }}" --allow-empty
           git push origin main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Git tag
         run: |
           git tag -a v${{ fromJSON(steps.create-version.outputs.result) }} -m "New version v${{ fromJSON(steps.create-version.outputs.result) }}" -f
           git push -f --tags
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
