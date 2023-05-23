@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
@@ -12,8 +15,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+        #   token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
 
       - name: Create Version
         uses: actions/github-script@v6
