@@ -29,13 +29,14 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const { repo, owner } = context.repo;
+
             const pullRequest = await github.rest.pulls.get({
               owner,
               repo,
               pull_number: context.issue.number
             });
 
-            const { repo, owner } = context.repo;
             const result = await github.rest.pulls.create({
               title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
               owner,
