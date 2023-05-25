@@ -28,8 +28,6 @@ jobs:
       - name: Create Pull Request
         uses: actions/github-script@v6
         id: create-pull-request
-        env:
-          ACTIONS_STEP_DEBUG: true
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -51,14 +49,14 @@ jobs:
               ].join('\n')
             });
             
-            console.log(result);
+            console.log(result.data);
 
-            return result;
+            return result.data.number;
 
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ fromJSON(steps.create-pull-request.outputs.result) }}
+          number: ${{ steps.create-pull-request.outputs.result }}
           method: merge
-          repo: jonathanbergson/poc-github-actions
+          repo: jonathanbergson/poc-github-action
