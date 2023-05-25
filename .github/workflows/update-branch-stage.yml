@@ -27,6 +27,7 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v6
+        id: create-pull-request
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -37,7 +38,7 @@ jobs:
               pull_number: context.issue.number
             });
 
-            const { id } = await github.rest.pulls.create({
+            const result = await github.rest.pulls.create({
               title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
               owner,
               repo,
@@ -48,11 +49,10 @@ jobs:
               ].join('\n')
             });
 
-            return id;
+            return result;
 
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ fromJSON(steps.create-version.outputs.result) }}
-          repo: juliangruber/octokit-action
+          number: ${{ fromJSON(steps.create-pull-request.outputs.result) }}
