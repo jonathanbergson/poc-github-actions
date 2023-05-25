@@ -28,6 +28,8 @@ jobs:
       - name: Create Pull Request
         uses: actions/github-script@v6
         id: create-pull-request
+        env:
+          ACTIONS_STEP_DEBUG: true
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -48,6 +50,8 @@ jobs:
                 pullRequest.data.body,
               ].join('\n')
             });
+            
+            console.log(result)
 
             return result;
 
