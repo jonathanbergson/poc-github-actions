@@ -56,3 +56,5 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ fromJSON(steps.create-pull-request.outputs.result) }}
+          method: merge
+          repo: jonathanbergson/poc-github-actions
