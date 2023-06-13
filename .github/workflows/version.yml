@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Bolinha
+        run: echo "${GITHUB_TOKEN}"
+
       - name: Checkout Repo
         uses: actions/checkout@v3
         with:
