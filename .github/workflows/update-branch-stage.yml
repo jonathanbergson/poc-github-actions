@@ -62,7 +62,7 @@ jobs:
                 owner,
                 repo,
                 base: 'stage',
-                head: 'main',
+                head: `${owner}:main`,
               });
 
               console.log(pullRequestStage.data);
