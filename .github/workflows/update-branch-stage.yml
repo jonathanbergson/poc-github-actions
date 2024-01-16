@@ -37,22 +37,24 @@ jobs:
               pull_number: context.issue.number
             });
 
-            const pullRequestStage = await github.rest.pulls.create({
-              title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
-              owner,
-              repo,
-              head: 'main',
-              base: 'stage',
-              body: [
-                pullRequest.data.body,
-              ].join('\n')
-            });
+            try {
+              const pullRequestStage = await github.rest.pulls.create({
+                title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
+                owner,
+                repo,
+                head: 'main',
+                base: 'stage',
+                body: [
+                  pullRequest.data.body,
+                ].join('\n')
+              });
 
-            console.log(pullRequestStage);
-
-#            await github.rest.pulls.merge({
-#              owner,
-#              repo,
-#              pull_number: context.issue.number,
-#              merge_method: 'merge' // Pode ser 'merge', 'squash' ou 'rebase'
-#            });
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: pullRequestStage.data.number,
+                merge_method: 'merge'
+              });
+            } catch (error) {
+              console.log(error);
+            }
