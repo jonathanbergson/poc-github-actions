@@ -61,8 +61,8 @@ jobs:
               const pullRequestStage = await github.rest.pulls.get({
                 owner,
                 repo,
-                base: 'main',
-                head: 'stage'
+                base: 'stage',
+                head: 'main',
               });
 
               console.log(pullRequestStage.data);
