@@ -50,13 +50,6 @@ jobs:
               });
 
               console.log(pullRequestStage);
-
-#              await github.rest.pulls.merge({
-#                owner,
-#                repo,
-#                pull_number: pullRequestStage.data.number,
-#                merge_method: 'merge'
-#              });
             } catch (error) {
               console.log(error);
             }
