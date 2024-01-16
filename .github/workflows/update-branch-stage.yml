@@ -48,11 +48,9 @@ jobs:
               ].join('\n')
             });
 
-            console.log(pullRequestStage);
-
-#            await github.rest.pulls.merge({
-#              owner,
-#              repo,
-#              pull_number: context.issue.number,
-#              merge_method: 'merge' // Pode ser 'merge', 'squash' ou 'rebase'
-#            });
+            await github.rest.pulls.merge({
+              owner,
+              repo,
+              pull_number: pullRequestStage.data.number,
+              merge_method: 'merge'
+            });
