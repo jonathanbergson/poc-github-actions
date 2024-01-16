@@ -56,12 +56,9 @@ jobs:
                 merge_method: 'merge',
               });
             } catch (error) {
-              console.log(error);
-
               const pullRequestStage = await github.rest.pulls.get({
                 owner,
                 repo,
-                base: 'stage',
                 head: `${owner}:main`,
               });
 
