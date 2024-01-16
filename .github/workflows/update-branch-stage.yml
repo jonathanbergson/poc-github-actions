@@ -1,4 +1,4 @@
-name: Update Branch Stage
+name: "Release: Update Stage"
 
 on:
   pull_request:
@@ -27,7 +27,6 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v6
-        id: create-pull-request
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -38,19 +37,24 @@ jobs:
               pull_number: context.issue.number
             });
 
-            const result = await github.rest.pulls.create({
-              title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
-              owner,
-              repo,
-              head: 'main',
-              base: 'stage',
-              body: [
-                pullRequest.data.body,
-              ].join('\n')
-            });
+            try {
+              const pullRequestStage = await github.rest.pulls.create({
+                title: 'release | v${{ fromJSON(steps.create-version.outputs.result) }} | merge in stage',
+                owner,
+                repo,
+                head: 'main',
+                base: 'stage',
+                body: [
+                  pullRequest.data.body,
+                ].join('\n')
+              });
 
-            await github.rest.pulls.merge({
-              owner,
-              repo,
-              pull_number: result.data.number,
-            });
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: pullRequestStage.data.number,
+                merge_method: 'merge'
+              });
+            } catch (error) {
+              console.log(error);
+            }
