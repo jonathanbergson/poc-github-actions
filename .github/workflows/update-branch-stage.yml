@@ -49,7 +49,21 @@ jobs:
                 ].join('\n')
               });
 
-              console.log(pullRequestStage.data);
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: pullRequestStage.data.number,
+                merge_method: 'merge',
+              });
             } catch (error) {
               console.log(error);
+
+              const pullRequestStage = await github.rest.pulls.get({
+                owner,
+                repo,
+                base: 'main',
+                head: 'stage'
+              });
+
+              console.log(pullRequestStage.data);
             }
