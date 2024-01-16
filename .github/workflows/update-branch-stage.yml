@@ -49,7 +49,7 @@ jobs:
                 ].join('\n')
               });
 
-              console.log(pullRequestStage);
+              console.log(pullRequestStage.data);
             } catch (error) {
               console.log(error);
             }
