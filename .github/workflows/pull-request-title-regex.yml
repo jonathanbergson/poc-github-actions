@@ -22,5 +22,8 @@ jobs:
             const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
 
             if (regexTasks.test(title) === false && regexRelease.test(title) === false) {
+              console.log(title);
+              console.log("RegEx Tasks: " + regexTasks.test(title));
+              console.log("RegEx Release: " + regexRelease.test(title));
               core.setFailed("Invalid PR title. Title should match the specified pattern.");
             }
