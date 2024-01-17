@@ -22,6 +22,8 @@ jobs:
             const prTitle = context.payload.pull_request.title;
             const prNumber = context.payload.pull_request.number;
 
+            console.log(github.rest);
+
             const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
             const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
 
