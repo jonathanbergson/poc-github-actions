@@ -54,7 +54,7 @@ jobs:
                 repo,
                 pull_number: pullRequestStage.data.number,
                 merge_method: 'merge',
-                sha: pullRequest.data.head.sha,
+                sha: pullRequestStage.data.head.sha,
               });
             } catch (error) {
               const pullRequestStage = await github.rest.pulls.get({
@@ -62,6 +62,4 @@ jobs:
                 repo,
                 head: `${owner}:main`,
               });
-
-              console.log(pullRequestStage.data);
             }
