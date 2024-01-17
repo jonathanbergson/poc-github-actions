@@ -8,7 +8,7 @@ on:
       - stage
 
 jobs:
-  pr-title-regex:
+  test-regex:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
           script: |
             const title = context.issue.title;
 
-            const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-\d{4}\): .+$/;
+            const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
             const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
 
             if (regexTasks.test(title) === false && regexRelease.test(title) === false) {
