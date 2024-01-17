@@ -18,6 +18,9 @@ jobs:
           script: |
             const title = context.issue.title;
 
+            console.log(context)
+            console.log(context.issue)
+
             const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
             const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
 
