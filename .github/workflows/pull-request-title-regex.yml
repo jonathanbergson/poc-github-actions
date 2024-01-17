@@ -6,6 +6,9 @@ on:
       - main
       - releases/**
       - stage
+    types:
+      - opened
+      - edited
 
 jobs:
   test-regex:
