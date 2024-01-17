@@ -37,18 +37,18 @@ jobs:
                   repo,
                   issue_number: prNumber,
                   body: `
-                    Olá @${context.payload.pull_request.user.login} 👋
+                  Olá @${context.payload.pull_request.user.login} 👋
 
-                    Obrigado por abrir este pull request. Infelizmente, o título deste pull request não corresponde ao padrão especificado.
+                  Obrigado por abrir este pull request. Infelizmente, o título deste pull request não corresponde ao padrão especificado.
 
-                    Por favor, atualize o título deste pull request para seguir o seguinte padrão:
+                  Por favor, atualize o título deste pull request para seguir o seguinte padrão:
 
-                    - \`bugfix(CXM-1234): Fixing a bug\`
-                    - \`feat(CXM-1234): Adding a new feature\`
-                    - \`hotfix(CXM-1234): Fixing a hotfix\`
-                    - \`tech(CXM-1234): Updating a tech task\`
-                    - \`release | vX.X.X\
-                    - \`release | vX.X.X - Release notes\
+                  - \`bugfix(CXM-1234): Fixing a bug\`
+                  - \`feat(CXM-1234): Adding a new feature\`
+                  - \`hotfix(CXM-1234): Fixing a hotfix\`
+                  - \`tech(CXM-1234): Updating a tech task\`
+                  - \`release | vX.X.X\`
+                  - \`release | vX.X.X - Release notes\`
                   `
                 });
               } catch (error) {
