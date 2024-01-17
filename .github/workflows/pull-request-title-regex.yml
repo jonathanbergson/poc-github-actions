@@ -10,16 +10,17 @@ on:
 jobs:
   pr-title-regex:
     runs-on: ubuntu-latest
+
     steps:
       - name: Test RegEx
         uses: actions/github-script@v6
         with:
-        script: |
-          const title = github.event.pull_request.title;
+          script: |
+            const title = github.event.pull_request.title;
 
-          const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-\d{4}\): .+$/;
-          const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
+            const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-\d{4}\): .+$/;
+            const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
 
-          if (regexTasks.test(title) === false && regexRelease.test(title) === false) {
-            core.setFailed("Invalid PR title. Title should match the specified pattern.");
-          }
+            if (regexTasks.test(title) === false && regexRelease.test(title) === false) {
+              core.setFailed("Invalid PR title. Title should match the specified pattern.");
+            }
