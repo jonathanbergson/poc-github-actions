@@ -16,10 +16,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const title = context.issue.title;
-
-            console.log(context)
-            console.log(context.issue)
+            const title = context.pull_request.title;
 
             const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
             const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
