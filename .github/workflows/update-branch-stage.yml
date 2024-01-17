@@ -57,9 +57,5 @@ jobs:
                 sha: pullRequestStage.data.head.sha,
               });
             } catch (error) {
-              const pullRequestStage = await github.rest.pulls.get({
-                owner,
-                repo,
-                head: `${owner}:main`,
-              });
+              console.log(error);
             }
