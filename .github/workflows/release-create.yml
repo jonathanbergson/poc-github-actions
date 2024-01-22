@@ -84,7 +84,7 @@ jobs:
                   repo,
                   pull_number: number,
                   merge_method: "squash"
-                  sha: pullCreated.data.head.sha,
+                  sha: pull.data.head.sha,
                 });
 
                 releasePRs.push({ title, number });
