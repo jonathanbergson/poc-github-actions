@@ -39,26 +39,34 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const version = "${{ fromJSON(steps.release.outputs.result) }}";
+            const { repo, owner } = context.repo;
+            const branchRelease = "${{ fromJSON(steps.release.outputs.result) }}";
             const prs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
 
             for (const pr of prs) {
               try {
                 const pull = await github.rest.pulls.get({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
+                  owner,
+                  repo,
                   pull_number: pr
                 });
 
                 if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
-                    base: version,
+                    base: branchRelease,
                     pull_number: pr,
                     owner: context.repo.owner,
                     repo: context.repo.repo
                   });
                 } else {
-                  // TODO: Create new PR
+                  const pullRequestStage = await github.rest.pulls.create({
+                    title: pull.data.title,
+                    owner,
+                    repo,
+                    head: pull.data.head.ref,
+                    base: branchRelease,
+                    body: pull.data.body,
+                  });
                 }
               } catch (error) {
                 console.log(error);
