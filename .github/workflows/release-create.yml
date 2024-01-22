@@ -45,7 +45,7 @@ jobs:
             const { repo, owner } = context.repo;
             const pullRequestIDs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
 
-            return pullRequestIDs.map(id => {
+            return pullRequestIDs.map(async id => {
               let title, number;
 
               try {
