@@ -98,7 +98,7 @@ jobs:
 
 
             for (const pr of releasePRs) {
-              console.log(pr);
+              console.log(typeof pr);
             
               try {
                 await github.rest.pulls.merge({
