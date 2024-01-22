@@ -19,7 +19,7 @@ jobs:
 
       - name: Create Version
         uses: actions/github-script@v6
-        id: release
+        id: releaseName
         with:
           script: |
             const currentDate = new Date()
@@ -31,41 +31,53 @@ jobs:
 
       - name: Create Release Branch
         run: |
-          git checkout -b release/v${{ fromJSON(steps.release.outputs.result) }} main
-          git push origin release/v${{ fromJSON(steps.release.outputs.result) }}
+          git checkout -b release/v${{ fromJSON(steps.releaseName.outputs.result) }} main
+          git push origin release/v${{ fromJSON(steps.releaseName.outputs.result) }}
 
-      - name: Change PR base or create new PR
+      - name: Update and Create PRs
         uses: actions/github-script@v6
+        id: releasePRs
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { repo, owner } = context.repo;
-            const branchRelease = "${{ fromJSON(steps.release.outputs.result) }}";
             const prs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
+            const branchRelease = "${{ fromJSON(steps.releaseName.outputs.result) }}";
+            const releasePRs = [];
 
-            for (const pr of prs) {
+            for (const pullNumber of prs) {
               try {
                 const pull = await github.rest.pulls.get({
                   owner,
                   repo,
-                  pull_number: pr
+                  pull_number: pullNumber,
                 });
 
                 if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
                     base: branchRelease,
-                    pull_number: pr,
+                    pull_number: pullNumber,
                     owner: context.repo.owner,
                     repo: context.repo.repo
                   });
+
+                  releasePRs.push({
+                    title: pull.data.title,
+                    number: pullNumber,
+                  });
                 } else {
-                  const pullRequestStage = await github.rest.pulls.create({
+                  const pullCreated = await github.rest.pulls.create({
                     title: pull.data.title,
                     owner,
                     repo,
                     head: pull.data.head.ref,
                     base: branchRelease,
                     body: pull.data.body,
+                  });
+
+                  releasePRs.push({
+                    title: pullCreated.data.title,
+                    number: pullCreated.data.number,
                   });
                 }
               } catch (error) {
@@ -74,33 +86,37 @@ jobs:
               }
             }
 
-#      # Merge PRs into release branch
-#      - name: Merge PRs
-#        uses: actions/github-script@v6
-#        with:
-#          github-token: ${{secrets.GITHUB_TOKEN}}
-#          script: |
-#            const prs = "${{ github.event.inputs.prs }}".split(",");
-#            for (const pr of prs) {
-#              await github.pulls.merge({
-#                owner: context.repo.owner,
-#                repo: context.repo.repo,
-#                pull_number: pr.trim(),
-#                merge_method: "squash"
-#              });
-#            }
-#
-#      # Create a pull request from release branch to main
-#      - name: Create PR
-#        uses: actions/github-script@v6
-#        with:
-#          github-token: ${{secrets.GITHUB_TOKEN}}
-#          script: |
-#            await github.pulls.create({
-#              owner: context.repo.owner,
-#              repo: context.repo.repo,
-#              title: "Merge release/v24.1.22 into main",
-#              head: "release/v24.1.22",
-#              base: "main",
-#              body: `This PR includes merged demands:\n\n${{ github.event.inputs.prs }}`
-#            });
+            return releasePRs;
+
+      - name: Merge PRs into Release Branch
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { repo, owner } = context.repo;
+            const releasePRs = "${{ fromJSON(steps.releasePRs.outputs.result) }}";
+
+            for (const pr of releasePRs) {
+              await github.pulls.merge({
+                owner,
+                repo,
+                pull_number: pr.number,
+                merge_method: "squash"
+              });
+            }
+
+      - name: Create Release PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const branchRelease = "${{ fromJSON(steps.release.outputs.result) }}";
+
+            await github.pulls.create({
+              owner,
+              repo,
+              title: "release | v24.1.22",
+              head: branchRelease,
+              base: "main",
+              body: `This PR includes merged demands:\n\n${{ github.event.inputs.prs }}`
+            });
