@@ -93,9 +93,9 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            console.log(typeof ${{ fromJSON(steps.releasePRs.outputs.result) }});
             const { repo, owner } = context.repo;
             const releasePRs = JSON.parse("${{ steps.releasePRs.outputs.result }}");
+            console.log(typeof releasePRs);
 
 
             for (const pr of releasePRs) {
