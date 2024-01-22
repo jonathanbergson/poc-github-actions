@@ -95,6 +95,7 @@ jobs:
           script: |
             const { repo, owner } = context.repo;
             const releasePRs = JSON.parse("${{ steps.releasePRs.outputs.result }}");
+            console.log(releasePRs);
 
 
             for (const pr of releasePRs) {
