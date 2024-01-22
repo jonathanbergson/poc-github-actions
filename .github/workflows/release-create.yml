@@ -83,7 +83,7 @@ jobs:
                   owner,
                   repo,
                   pull_number: number,
-                  merge_method: "squash"
+                  merge_method: "squash",
                   sha: pull.data.head.sha,
                 });
 
