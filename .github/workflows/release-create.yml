@@ -46,7 +46,7 @@ jobs:
             const release = require('./.github/workflows/release.js');
             const pullRequestIDs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
 
-            return pullRequestIDs.map(async id => {
+            for (const id of pullRequestIDs) {
               let title, number;
 
               try {
@@ -87,13 +87,11 @@ jobs:
                   merge_method: "squash",
                   sha: pull.data.head.sha,
                 });
-
-                return { title, number };
               } catch (error) {
                 console.log(error);
                 return {};
               }
-            });
+            }
 
       - name: Create Description
         uses: actions/github-script@v6
