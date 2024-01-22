@@ -22,7 +22,7 @@ jobs:
         id: releaseName
         with:
           script: |
-            const release = require('./release.js');
+            const release = require('./.github/workflows/release.js');
             return release.getBranchName();
 
       - name: Create Release Branch
