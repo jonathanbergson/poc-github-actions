@@ -24,7 +24,7 @@ jobs:
           script: |
             const currentDate = new Date()
             const year = currentDate.getFullYear().toString().slice(2)
-            const month = currentDate.getMonth()
+            const month = currentDate.getMonth() + 1
             const date = currentDate.getDate()
             const version = year + '.' + month + '.' + date
             return version
@@ -42,23 +42,27 @@ jobs:
             const version = "${{ fromJSON(steps.release.outputs.result) }}";
             const prs = "${{ github.event.inputs.prs }}".split(",").map(pr => pr.trim());
 
-            console.log('version', version);
-            console.log('prs', prs);
-
             for (const pr of prs) {
-              const pull = await github.pulls.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pr
-              });
-
-              if (pull.data.base.ref !== version) {
-                await github.pulls.update({
-                  base: version,
-                  pull_number: pr,
+              try {
+                const pull = await github.rest.pulls.get({
                   owner: context.repo.owner,
-                  repo: context.repo.repo
+                  repo: context.repo.repo,
+                  pull_number: pr
                 });
+
+                console.log(pull.data);
+
+                if (pull.data.base.ref !== version) {
+                  await github.rest.pulls.update({
+                    base: version,
+                    pull_number: pr,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo
+                  });
+                }
+              } catch (e) {
+                console.log(`PR ${pr} does not exist`);
+                continue;
               }
             }
 
