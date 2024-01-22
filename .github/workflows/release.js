@@ -1,4 +1,4 @@
-module.exports.getNumber = () => {
+const getNumber = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear().toString().slice(2);
   const month = currentDate.getMonth() + 1;
@@ -7,17 +7,24 @@ module.exports.getNumber = () => {
   return year + '.' + month + '.' + date;
 }
 
-module.exports.getBranchName = () => {
+const getBranchName = () => {
   const version = getNumber()
   return `release/v${version}`
 }
 
-module.exports.getPullRequestTitle = () => {
+const getPullRequestTitle = () => {
   const version = getNumber()
   return `release | v${version}`
 }
 
-module.exports.getPullRequestStageTitle = () => {
+const getPullRequestStageTitle = () => {
   const prTitle = getPullRequestTitle()
   return `${prTitle} - merge in stage`
+}
+
+module.exports = {
+  getNumber,
+  getBranchName,
+  getPullRequestTitle,
+  getPullRequestStageTitle
 }
