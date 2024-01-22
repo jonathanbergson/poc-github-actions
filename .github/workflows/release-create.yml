@@ -97,12 +97,17 @@ jobs:
             const releasePRs = "${{ fromJSON(steps.releasePRs.outputs.result) }}";
 
             for (const pr of releasePRs) {
-              await github.pulls.merge({
-                owner,
-                repo,
-                pull_number: pr.number,
-                merge_method: "squash"
-              });
+              try {
+                await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: pr.number,
+                  merge_method: "squash"
+                });
+              } catch (error) {
+                console.log(error);
+                continue;
+              }
             }
 
       - name: Create Release PR
@@ -112,11 +117,15 @@ jobs:
             const { repo, owner } = context.repo;
             const branchRelease = "${{ fromJSON(steps.release.outputs.result) }}";
 
-            await github.pulls.create({
-              owner,
-              repo,
-              title: "release | v24.1.22",
-              head: branchRelease,
-              base: "main",
-              body: `This PR includes merged demands:\n\n${{ github.event.inputs.prs }}`
-            });
+            try {
+              await github.rest.pulls.create({
+                owner,
+                repo,
+                title: "release | v24.1.22",
+                head: branchRelease,
+                base: "main",
+                body: `This PR includes merged demands:\n\n${{ github.event.inputs.prs }}`
+              });
+            } catch (error) {
+              console.log(error);
+            }
