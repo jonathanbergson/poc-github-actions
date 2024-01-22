@@ -96,6 +96,8 @@ jobs:
             const { repo, owner } = context.repo;
             const releasePRs = "${{ fromJSON(steps.releasePRs.outputs.result) }}";
 
+            console.log(releasePRs);
+
             for (const pr of releasePRs) {
               try {
                 await github.rest.pulls.merge({
