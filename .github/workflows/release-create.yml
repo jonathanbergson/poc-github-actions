@@ -86,16 +86,16 @@ jobs:
               }
             }
 
-            return JSON.stringify(releasePRs);
+            return releasePRs;
 
       - name: Merge PRs into Release Branch
         uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log(typeof ${{ fromJSON(steps.releasePRs.outputs.result) }});
             const { repo, owner } = context.repo;
             const releasePRs = JSON.parse("${{ steps.releasePRs.outputs.result }}");
-            console.log(releasePRs);
 
 
             for (const pr of releasePRs) {
