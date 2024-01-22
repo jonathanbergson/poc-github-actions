@@ -43,6 +43,7 @@ jobs:
         with:
           script: |
             const { repo, owner } = context.repo;
+            const release = require('./.github/workflows/release.js');
             const pullRequestIDs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
 
             return pullRequestIDs.map(async id => {
