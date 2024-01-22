@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  merge:
+  release-create:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -96,9 +96,10 @@ jobs:
             const { repo, owner } = context.repo;
             const releasePRs = "${{ fromJSON(steps.releasePRs.outputs.result) }}";
 
-            console.log(releasePRs);
 
             for (const pr of releasePRs) {
+              console.log(pr);
+            
               try {
                 await github.rest.pulls.merge({
                   owner,
