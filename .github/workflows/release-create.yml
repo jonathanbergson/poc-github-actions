@@ -34,13 +34,13 @@ jobs:
           git checkout -b release/v${{ fromJSON(steps.release.outputs.result) }} main
           git push origin release/v${{ fromJSON(steps.release.outputs.result) }}
 
-      - name: Change PR base
+      - name: Change PR base or create new PR
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const version = "${{ fromJSON(steps.release.outputs.result) }}";
-            const prs = "${{ github.event.inputs.prs }}".split(",").map(pr => pr.trim());
+            const prs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
 
             for (const pr of prs) {
               try {
@@ -50,18 +50,18 @@ jobs:
                   pull_number: pr
                 });
 
-                console.log(pull.data);
-
-                if (pull.data.base.ref !== version) {
+                if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
                     base: version,
                     pull_number: pr,
                     owner: context.repo.owner,
                     repo: context.repo.repo
                   });
+                } else {
+                  // TODO: Create new PR
                 }
-              } catch (e) {
-                console.log(`PR ${pr} does not exist`);
+              } catch (error) {
+                console.log(error);
                 continue;
               }
             }
