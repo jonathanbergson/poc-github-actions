@@ -6,20 +6,52 @@ on:
       - main
       - releases/**
       - stage
+    types:
+      - opened
+      - edited
 
 jobs:
-  pr-title-regex:
+  test-regex:
     runs-on: ubuntu-latest
+
     steps:
       - name: Test RegEx
         uses: actions/github-script@v6
         with:
-        script: |
-          const title = github.event.pull_request.title;
+          script: |
+            const prTitle = context.payload.pull_request.title;
+            const prNumber = context.payload.pull_request.number;
 
-          const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-\d{4}\): .+$/;
-          const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
+            console.log(github.rest.pulls.createReviewComment);
 
-          if (regexTasks.test(title) === false && regexRelease.test(title) === false) {
-            core.setFailed("Invalid PR title. Title should match the specified pattern.");
-          }
+            const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
+            const regexRelease = /^release \| v\d+\.\d+\.\d+.+$/;
+
+            if (regexTasks.test(prTitle) === false && regexRelease.test(prTitle) === false) {
+              core.setFailed("Invalid PR title. Title should match the specified pattern.");
+
+              try {
+                const { repo, owner } = context.repo;
+                const pullRequest = await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  body: `
+            Olá @${context.payload.pull_request.user.login} 👋
+
+            Obrigado por abrir este pull request.
+            Infelizmente, o título deste pull request não corresponde ao padrão especificado.
+            Por favor, atualize o título deste pull request para seguir o seguinte padrão:
+
+            - \`bugfix(CXM-1234): Fixing a bug\`
+            - \`feat(CXM-1234): Adding a new feature\`
+            - \`hotfix(CXM-1234): Fixing a hotfix\`
+            - \`tech(CXM-1234): Updating a tech task\`
+            - \`release | vX.X.X\`
+            - \`release | vX.X.X - Release notes\`
+                  `
+                });
+              } catch (error) {
+                core.setFailed(error.message);
+              }
+            }
