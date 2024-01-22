@@ -31,10 +31,10 @@ jobs:
 
       - name: Create Release Branch
         run: |
-          git checkout -b release/v${{ fromJSON(steps.releaseName.outputs.result) }} main
-          git push origin release/v${{ fromJSON(steps.releaseName.outputs.result) }}
+          git checkout -b release/v${{ steps.releaseName.outputs.result }} main
+          git push origin release/v${{ steps.releaseName.outputs.result }} -f
 
-      - name: Update and Create PRs
+      - name: Update/Create and Merge PRs
         uses: actions/github-script@v6
         id: releasePRs
         with:
@@ -42,44 +42,52 @@ jobs:
           script: |
             const { repo, owner } = context.repo;
             const prs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
-            const branchRelease = "${{ fromJSON(steps.releaseName.outputs.result) }}";
+            const branchRelease = ${{ steps.releaseName.outputs.result }};
             const releasePRs = [];
 
-            for (const pullNumber of prs) {
+            for (const pr of prs) {
+              let title, number;
+
               try {
                 const pull = await github.rest.pulls.get({
                   owner,
                   repo,
-                  pull_number: pullNumber,
+                  pull_number: pr,
                 });
 
                 if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
-                    base: branchRelease,
-                    pull_number: pullNumber,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo
-                  });
-
-                  releasePRs.push({
-                    title: pull.data.title,
-                    number: pullNumber,
-                  });
-                } else {
-                  const pullCreated = await github.rest.pulls.create({
-                    title: pull.data.title,
                     owner,
                     repo,
-                    head: pull.data.head.ref,
                     base: branchRelease,
+                    pull_number: pr,
+                  });
+
+                  title = pull.data.title;
+                  number = pull.data.number;
+                } else {
+                  const pullCreated = await github.rest.pulls.create({
+                    owner,
+                    repo,
+                    base: branchRelease,
+                    head: pull.data.head.ref,
+                    title: pull.data.title,
                     body: pull.data.body,
                   });
 
-                  releasePRs.push({
-                    title: pullCreated.data.title,
-                    number: pullCreated.data.number,
-                  });
+                  title = pullCreated.data.title;
+                  number = pullCreated.data.number;
                 }
+
+                await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: number,
+                  merge_method: "squash"
+                  sha: pullCreated.data.head.sha,
+                });
+
+                releasePRs.push({ title, number });
               } catch (error) {
                 console.log(error);
                 continue;
@@ -88,38 +96,35 @@ jobs:
 
             return releasePRs;
 
-      - name: Merge PRs into Release Branch
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { repo, owner } = context.repo;
-            const releasePRs = ${{ steps.releasePRs.outputs.result }};
-            console.log(typeof releasePRs);
-
-
-            for (const pr of releasePRs) {
-              console.log(typeof pr);
-
-              try {
-                await github.rest.pulls.merge({
-                  owner,
-                  repo,
-                  pull_number: pr.number,
-                  merge_method: "squash"
-                });
-              } catch (error) {
-                console.log(error);
-                continue;
-              }
-            }
+#      - name: Merge PRs into Release Branch
+#        uses: actions/github-script@v6
+#        with:
+#          github-token: ${{secrets.GITHUB_TOKEN}}
+#          script: |
+#            const { repo, owner } = context.repo;
+#            const releasePRs = ${{ steps.releasePRs.outputs.result }};
+#
+#            for (const pr of releasePRs) {
+#              try {
+#                await github.rest.pulls.merge({
+#                  owner,
+#                  repo,
+#                  pull_number: pr.number,
+#                  merge_method: "squash"
+#                  sha: pullRequestStage.data.head.sha,
+#                });
+#              } catch (error) {
+#                console.log(error);
+#                continue;
+#              }
+#            }
 
       - name: Create Release PR
         uses: actions/github-script@v6
         with:
           script: |
             const { repo, owner } = context.repo;
-            const branchRelease = "${{ fromJSON(steps.release.outputs.result) }}";
+            const branchRelease = ${{ steps.releaseName.outputs.result }};
 
             try {
               await github.rest.pulls.create({
