@@ -101,13 +101,14 @@ jobs:
 
       - name: Create Release PR
         uses: actions/github-script@v6
+        id: create-release-pr
         with:
           script: |
             const { repo, owner } = context.repo;
             const release = require('./.github/workflows/release.js');
 
             try {
-              await github.rest.pulls.create({
+              const pull = await github.rest.pulls.create({
                 owner,
                 repo,
                 title: release.getPullRequestTitle(),
@@ -115,6 +116,20 @@ jobs:
                 base: 'main',
                 body: `## 🎉 Lista de demandas:\n\n${{ github.event.inputs.prs }}`
               });
+
+              core.setOutput('version', release.getNumber());
+              core.setOutput('link', pull.data.html_url);
             } catch (error) {
               console.log(error);
             }
+
+      - name: Send Slack message
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "version": "${{ steps.create-release-pr.outputs.version }}",
+              "link": "${{ steps.create-release-pr.outputs.link }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
