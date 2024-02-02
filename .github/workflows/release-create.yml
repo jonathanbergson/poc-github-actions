@@ -34,8 +34,21 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            console.log('Close Release PR');
-            console.log('Close Tasks PRs');
+            const release = require('./.github/workflows/release.js');
+
+            try {
+              const pull = await github.rest.pulls.get({
+                owner,
+                repo,
+                head: release.getBranchName(),
+                base: 'main',
+              });
+
+              console.log(pull);
+            } catch (error) {
+              console.log(error);
+            }
+
 
       - name: Update/Create and Merge PRs
         uses: actions/github-script@v6
@@ -57,8 +70,6 @@ jobs:
                   repo,
                   pull_number: id,
                 });
-
-                console.log(pull.data);
 
                 if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
