@@ -22,9 +22,40 @@ const getPullRequestStageTitle = () => {
   return `${prTitle} - merge in stage`
 }
 
+const getJiraCardNumber = (prTitle) => {
+  let match = prTitle.match(/\((\S+)-(\d{4})\)/);
+  return match ? match[2] : null;
+}
+
+const createPullRequestDescription = (pulls = []) => {
+  let description = `## 🎉 Lista de demandas:\n\n`;
+
+  pulls.forEach(item => {
+    let line = '';
+
+    if (item.jiraCard) {
+      line += `[${item.jiraCard}](https://trackco.atlassian.net/browse/${item.jiraCard})`;
+    }
+    if (item.prAuthor) {
+      line += `@${item.prAuthor} `;
+    }
+    if (item.prNumber) {
+      line += `#${item.prNumber}`;
+    }
+
+    if (line) {
+      description += '- ' + line + '\n';
+    }
+  });
+
+  return description;
+}
+
 module.exports = {
+  createPullRequestDescription,
   getNumber,
   getBranchName,
+  getJiraCardNumber,
   getPullRequestTitle,
   getPullRequestStageTitle
 }

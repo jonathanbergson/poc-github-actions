@@ -45,6 +45,7 @@ jobs:
             const { repo, owner } = context.repo;
             const release = require('./.github/workflows/release.js');
             const pullRequestIDs = "${{ github.event.inputs.prs }}".split(',').map(pr => pr.trim());
+            const prs = [];
 
             for (const id of pullRequestIDs) {
               let title, number;
@@ -64,8 +65,11 @@ jobs:
                     pull_number: id,
                   });
 
-                  title = pull.data.title;
-                  number = pull.data.number;
+                  prs.push({
+                    jiraCard: release.getJiraCardNumber(pull.data.title),
+                    prAuthor: '',
+                    prNumber: pull.data.number,
+                  });
                 } else {
                   const pullCreated = await github.rest.pulls.create({
                     owner,
@@ -76,8 +80,11 @@ jobs:
                     body: pull.data.body,
                   });
 
-                  title = pullCreated.data.title;
-                  number = pullCreated.data.number;
+                  prs.push({
+                    jiraCard: release.getJiraCardNumber(pullCreated.data.title),
+                    prAuthor: '',
+                    prNumber: pullCreated.data.number,
+                  });
                 }
 
                 await github.rest.pulls.merge({
@@ -92,6 +99,8 @@ jobs:
                 return {};
               }
             }
+
+            return prs;
 
       - name: Create Description
         uses: actions/github-script@v6
