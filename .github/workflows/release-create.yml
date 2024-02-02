@@ -73,6 +73,7 @@ jobs:
                     jiraCard: release.getJiraCardNumber(pull.data.title),
                     prAuthor: pull.data.assignees.map(assignee => assignee.login),
                     prNumber: pull.data.number,
+                    prTitle: pull.data.title,
                   });
                 } else {
                   const pullCreated = await github.rest.pulls.create({
@@ -89,6 +90,7 @@ jobs:
                     jiraCard: release.getJiraCardNumber(pullCreated.data.title),
                     prAuthor: pull.data.assignees.map(assignee => assignee.login),
                     prNumber: pullCreated.data.number,
+                    prTitle: pullCreated.data.title,
                   });
                 }
 
