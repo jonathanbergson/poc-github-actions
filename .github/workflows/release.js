@@ -37,8 +37,10 @@ const createPullRequestDescription = (pulls = []) => {
     if (item.jiraCard) {
       line += `[CXM-${item.jiraCard}](https://trackco.atlassian.net/browse/CXM-${item.jiraCard})`;
     }
-    if (item.prAuthor) {
-      line += `@${item.prAuthor} `;
+    if (item.prAuthor && item.prAuthor.length > 0) {
+      item.prAuthor.forEach((author, index) => {
+        line += `@${author} `;
+      });
     }
     if (item.prNumber) {
       line += `#${item.prNumber}`;

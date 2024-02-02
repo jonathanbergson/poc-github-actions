@@ -71,7 +71,7 @@ jobs:
                   number = pull.data.number;
                   prs.push({
                     jiraCard: release.getJiraCardNumber(pull.data.title),
-                    prAuthor: '',
+                    prAuthor: pull.data.assignees.map(assignee => assignee.login),
                     prNumber: pull.data.number,
                   });
                 } else {
@@ -87,7 +87,7 @@ jobs:
                   number = pullCreated.data.number;
                   prs.push({
                     jiraCard: release.getJiraCardNumber(pullCreated.data.title),
-                    prAuthor: '',
+                    prAuthor: pull.data.assignees.map(assignee => assignee.login),
                     prNumber: pullCreated.data.number,
                   });
                 }
