@@ -41,7 +41,6 @@ jobs:
               const pull = await github.rest.pulls.get({
                 owner,
                 repo,
-                base: 'main',
               });
 
               console.log(pull);
