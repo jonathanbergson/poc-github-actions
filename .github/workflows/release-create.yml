@@ -48,7 +48,7 @@ jobs:
             const prs = [];
 
             for (const id of pullRequestIDs) {
-              let title, number;
+              let number;
               console.log('ID: ' + id);
 
               try {
@@ -66,6 +66,7 @@ jobs:
                     pull_number: id,
                   });
 
+                  number = pull.data.number;
                   prs.push({
                     jiraCard: release.getJiraCardNumber(pull.data.title),
                     prAuthor: '',
@@ -81,6 +82,7 @@ jobs:
                     body: pull.data.body,
                   });
 
+                  number = pullCreated.data.number;
                   prs.push({
                     jiraCard: release.getJiraCardNumber(pullCreated.data.title),
                     prAuthor: '',
