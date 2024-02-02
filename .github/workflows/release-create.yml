@@ -49,6 +49,7 @@ jobs:
 
             for (const id of pullRequestIDs) {
               let title, number;
+              console.log('ID: ' + id);
 
               try {
                 const pull = await github.rest.pulls.get({
@@ -95,6 +96,7 @@ jobs:
                   sha: pull.data.head.sha,
                 });
               } catch (error) {
+                console.log('Error: ' + id);
                 console.log(error);
                 return {};
               }
