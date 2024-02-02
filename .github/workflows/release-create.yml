@@ -132,13 +132,13 @@ jobs:
               console.log(error);
             }
 
-      - name: Send Slack message
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          payload: |
-            {
-              "version": "${{ steps.create-release-pr.outputs.version }}",
-              "link": "${{ steps.create-release-pr.outputs.link }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - name: Send Slack message
+#        uses: slackapi/slack-github-action@v1.24.0
+#        with:
+#          payload: |
+#            {
+#              "version": "${{ steps.create-release-pr.outputs.version }}",
+#              "link": "${{ steps.create-release-pr.outputs.link }}"
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
