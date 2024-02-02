@@ -30,27 +30,6 @@ jobs:
           git checkout -b ${{ steps.CreateBranchRelease.outputs.result }} main
           git push origin ${{ steps.CreateBranchRelease.outputs.result }} -f
 
-      - name: Close PRs
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const release = require('./.github/workflows/release.js');
-
-            try {
-              const pull = await github.rest.pulls.get({
-                owner,
-                repo,
-                state: 'open',
-                base: 'main',
-              });
-
-              console.log(pull);
-            } catch (error) {
-              console.log(error);
-            }
-
-
       - name: Update/Create and Merge PRs
         uses: actions/github-script@v6
         id: MergePRs
