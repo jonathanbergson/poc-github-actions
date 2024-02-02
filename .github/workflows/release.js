@@ -35,7 +35,7 @@ const createPullRequestDescription = (pulls = []) => {
     let line = '';
 
     if (item.jiraCard) {
-      line += `[${item.jiraCard}](https://trackco.atlassian.net/browse/${item.jiraCard})`;
+      line += `[CXM-${item.jiraCard}](https://trackco.atlassian.net/browse/CXM-${item.jiraCard})`;
     }
     if (item.prAuthor) {
       line += `@${item.prAuthor} `;

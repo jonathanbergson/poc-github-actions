@@ -58,6 +58,8 @@ jobs:
                   pull_number: id,
                 });
 
+                console.log(pull.data);
+
                 if (pull.data.state === 'open') {
                   await github.rest.pulls.update({
                     owner,
@@ -112,8 +114,6 @@ jobs:
           script: |
             const release = require('./.github/workflows/release.js');
             const prs = ${{ steps.MergePRs.outputs.result }};
-            console.log('Description: ' + JSON.stringify(prs));
-            console.log('Description: ' + release.createPullRequestDescription(prs));
             return release.createPullRequestDescription(prs);
 
       - name: Create Release PR
