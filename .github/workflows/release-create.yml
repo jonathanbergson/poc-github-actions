@@ -106,7 +106,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            console.log('Description');
+            const prs = ${{ steps.releasePRs.outputs.result }};
+            console.log('Description: ' + prs);
+            console.log('Description: ' + release.createPullRequestDescription(prs));
 
       - name: Create Release PR
         uses: actions/github-script@v6
