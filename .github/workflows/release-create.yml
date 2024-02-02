@@ -41,7 +41,6 @@ jobs:
               const pull = await github.rest.pulls.get({
                 owner,
                 repo,
-                head: release.getBranchName(),
                 base: 'main',
               });
 
