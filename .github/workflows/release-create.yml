@@ -19,7 +19,7 @@ jobs:
 
       - name: Create Branch Name
         uses: actions/github-script@v6
-        id: branchRelease
+        id: CreateBranchRelease
         with:
           script: |
             const release = require('./.github/workflows/release.js');
@@ -27,8 +27,8 @@ jobs:
 
       - name: Create Release Branch
         run: |
-          git checkout -b ${{ steps.branchRelease.outputs.result }} main
-          git push origin ${{ steps.branchRelease.outputs.result }} -f
+          git checkout -b ${{ steps.CreateBranchRelease.outputs.result }} main
+          git push origin ${{ steps.CreateBranchRelease.outputs.result }} -f
 
       - name: Close PRs
         uses: actions/github-script@v6
@@ -39,7 +39,7 @@ jobs:
 
       - name: Update/Create and Merge PRs
         uses: actions/github-script@v6
-        id: releasePRs
+        id: MergePRs
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -105,18 +105,20 @@ jobs:
 
             return prs;
 
-      - name: Create Description
+      - name: Create Release Description
         uses: actions/github-script@v6
+        id: CreateReleaseDescription
         with:
           script: |
             const release = require('./.github/workflows/release.js');
-            const prs = ${{ steps.releasePRs.outputs.result }};
+            const prs = ${{ steps.MergePRs.outputs.result }};
             console.log('Description: ' + JSON.stringify(prs));
             console.log('Description: ' + release.createPullRequestDescription(prs));
+            return release.createPullRequestDescription(prs);
 
       - name: Create Release PR
         uses: actions/github-script@v6
-        id: create-release-pr
+        id: CreateReleasePR
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -129,7 +131,7 @@ jobs:
                 title: release.getPullRequestTitle(),
                 head: release.getBranchName(),
                 base: 'main',
-                body: `## 🎉 Lista de demandas:\n\n${{ github.event.inputs.prs }}`
+                body: ${{ steps.CreateReleaseDescription.outputs.result }},
               });
 
               core.setOutput('version', release.getNumber());
@@ -143,8 +145,8 @@ jobs:
 #        with:
 #          payload: |
 #            {
-#              "version": "${{ steps.create-release-pr.outputs.version }}",
-#              "link": "${{ steps.create-release-pr.outputs.link }}"
+#              "version": "${{ steps.CreateReleasePR.outputs.version }}",
+#              "link": "${{ steps.CreateReleasePR.outputs.link }}"
 #            }
 #        env:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
