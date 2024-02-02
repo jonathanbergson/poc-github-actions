@@ -98,7 +98,6 @@ jobs:
               } catch (error) {
                 console.log('Error: ' + id);
                 console.log(error);
-                return {};
               }
             }
 
@@ -110,7 +109,7 @@ jobs:
           script: |
             const release = require('./.github/workflows/release.js');
             const prs = ${{ steps.releasePRs.outputs.result }};
-            console.log('Description: ' + prs);
+            console.log('Description: ' + JSON.stringify(prs));
             console.log('Description: ' + release.createPullRequestDescription(prs));
 
       - name: Create Release PR

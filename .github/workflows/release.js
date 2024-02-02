@@ -28,6 +28,7 @@ const getJiraCardNumber = (prTitle) => {
 }
 
 const createPullRequestDescription = (pulls = []) => {
+  console.log('pulls', pulls);
   let description = `## 🎉 Lista de demandas:\n\n`;
 
   pulls.forEach(item => {
