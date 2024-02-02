@@ -106,6 +106,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const release = require('./.github/workflows/release.js');
             const prs = ${{ steps.releasePRs.outputs.result }};
             console.log('Description: ' + prs);
             console.log('Description: ' + release.createPullRequestDescription(prs));
