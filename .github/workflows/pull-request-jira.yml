@@ -15,34 +15,9 @@ jobs:
 
    steps:
      - name: Jira Comments
-       uses: atlassian/gajira-comment@master
+       uses: actions/github-script@v6
+       id: CreateBranchRelease
        with:
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         jira-site: 'https://jira.atlassian.com'
-         jira-user-email: '
-
-
-https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment
-
-{
-	"jira_token": "ATATT3xFfGF0kJBvcl4uMn70QELvHccifDPb4gD3ukhcNeQ4-NPZX_MVz-5xwiViKgb1Dd2AOv3gw8uhpz4wv5FYp1dwnGLw7ur_ETDu7kET3C3J4eubfzj_mkpor8-qUVil7GwTBcCQcrrgQbdpVrbjgs8B4Kso28nrpMZDIGkXojz-AHEver8=C1CFCD09",
-	"jira_user": "jonathan@track.co"
-}
-
-{
-    "body": {
-        "type": "doc",
-        "version": 1,
-        "content": [
-            {
-                "type": "paragraph",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Deploy finalizado. Item disponível em hmg.track.co. "
-                    }
-                ]
-            }
-        ]
-    }
-}
+         script: |
+           const hira = require('./.github/workflows/jira.js');
+           return hira.pullRequestCreated();
