@@ -1,13 +1,7 @@
 name: "PR: Jira Comments"
 
 on:
-  pull_request:
-    branches:
-      - main
-      - releases/**
-      - stage
-    types:
-      - opened
+  workflow_dispatch:
 
 jobs:
   pr-open:
