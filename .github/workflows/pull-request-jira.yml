@@ -4,14 +4,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  pr-open:
+  pull-request-open:
    runs-on: ubuntu-latest
 
    steps:
+#     - run: npm install adf-builder
+
      - name: Jira Comments
        uses: actions/github-script@v6
-       id: CreateBranchRelease
        with:
          script: |
-           const hira = require('./.github/workflows/jira.js');
-           return hira.pullRequestCreated();
+           const jira = require('./.github/workflows/jira.js');
+           jira.pullRequestCreated();

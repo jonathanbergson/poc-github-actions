@@ -39,57 +39,57 @@ module.exports = {
 
 const body = {
   "body": {
-  "type": "doc",
-    "version": 1,
-    "content": [
-    {
-      "type": "panel",
-      "attrs": {
-        "panelType": "info"
-      },
+    "type": "doc",
+      "version": 1,
       "content": [
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Pull Request criado:"
-            }
-          ]
+      {
+        "type": "panel",
+        "attrs": {
+          "panelType": "info"
         },
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Assignees: @jonathanbergson"
-            }
-          ]
-        },
-        {
-          "type": "paragraph",
-          "content": [
-            {
-              "type": "text",
-              "text": "Link: "
-            },
-            {
-              "type": "text",
-              "text": "https://github.com/Tracksale/cxm-app/pull/1507",
-              "marks": [
-                {
-                  "type": "link",
-                  "attrs": {
-                    "href": "https://github.com/Tracksale/cxm-app/pull/1507",
-                    "title": "Pull Request link"
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Pull Request criado:"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Assignees: @jonathanbergson"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Link: "
+              },
+              {
+                "type": "text",
+                "text": "https://github.com/Tracksale/cxm-app/pull/1507",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://github.com/Tracksale/cxm-app/pull/1507",
+                      "title": "Pull Request link"
+                    }
                   }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
