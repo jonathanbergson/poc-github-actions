@@ -28,7 +28,6 @@
 
 const pullRequestCreated = () => {
   console.log('pullRequestCreated');
-  console.log('fetch', fetch);
   console.log('body', body);
 };
 
