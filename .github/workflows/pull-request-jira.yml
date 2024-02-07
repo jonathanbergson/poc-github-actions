@@ -13,7 +13,8 @@ jobs:
        with:
          ref: main
          fetch-depth: 0
-#     - run: npm install adf-builder
+
+     - run: npm install adf-builder
 
      - name: Jira Comments
        uses: actions/github-script@v6
