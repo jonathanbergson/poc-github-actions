@@ -1,4 +1,4 @@
-const { Document } = require('adf-builder');
+const { Document, marks } = require('adf-builder');
 
 const createJiraCommentEndpoint = (prTitle) => {
   const cardNumber = getJiraCardNumberWithPrefix(prTitle);
@@ -21,9 +21,12 @@ const pullRequestCreated = (prId) => {
   doc
     .panel('info')
     .paragraph()
-    .text('Pull Request criado: \n\n')
+    .emoji(':pushpin:')
+    .text('PR de FRONT: \n\n', marks().strong())
     .text('Assignees: ')
     .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+    .mention('jonathanbergson', 'jonathanbergson')
+    .mention('jonathanbergson', 'jonathan bergson')
     .text(' \n')
     .text('Link: ')
     .link(`https://github.com/Tracksale/cxm-app/pull/${prId}`, `https://github.com/Tracksale/cxm-app/pull/${prId}`)
