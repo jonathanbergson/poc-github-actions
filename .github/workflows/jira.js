@@ -15,18 +15,28 @@ const getJiraCardNumberWithPrefix = (prTitle) => {
   return prefix + getJiraCardNumber(prTitle);
 }
 
-const pullRequestCreated = (prId) => {
+const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
   const doc = new Document();
 
   doc
     .panel('info')
     .paragraph()
     .emoji(':pushpin:')
-    .text('PR de FRONT: \n\n', marks().strong())
-    .text('Assignees: ')
-    .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
-    .mention('jonathanbergson', 'jonathanbergson')
-    .mention('jonathanbergson', 'jonathan bergson')
+    .text(' PR de FRONT: \n', marks().strong())
+
+  if (assignees.length > 0) {
+    doc
+      .text('Assignees: ')
+      .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+  }
+
+  if (reviewers.length > 0) {
+    doc
+      .text('Reviewers: ')
+      .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+  }
+
+  doc
     .text(' \n')
     .text('Link: ')
     .link(`https://github.com/Tracksale/cxm-app/pull/${prId}`, `https://github.com/Tracksale/cxm-app/pull/${prId}`)

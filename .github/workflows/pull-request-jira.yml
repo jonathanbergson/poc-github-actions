@@ -38,7 +38,9 @@ jobs:
          script: |
            const jira = require('./.github/workflows/jira.js');
            const prNumber = "${{ github.event.pull_request.number }}";
-           return jira.pullRequestCreated(prNumber);
+           const prAssignees = "${{ github.event.pull_request.assignees }}";
+           const prReviewers = "${{ github.event.pull_request.requested_reviewers }}";
+           return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
 
       - name: Call Jira API
         run: |
