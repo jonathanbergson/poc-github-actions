@@ -31,4 +31,4 @@ jobs:
            --header 'Content-Type: application/json' \
            --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
            --url 'https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment'
-           --data-raw '{ "body": "${{ steps.CreateJiraComment.outputs.result }}" }'
+           --data-raw '{ "body": ${{ steps.CreateJiraComment.outputs.result }} }'
