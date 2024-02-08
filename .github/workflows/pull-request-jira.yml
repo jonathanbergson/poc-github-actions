@@ -28,7 +28,8 @@ jobs:
        run: |
          curl \
            --request POST \
+           --url 'https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment' \
            --header 'Content-Type: application/json' \
-           --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
-           --url 'https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment'
-           --data ${{ steps.CreateJiraComment.outputs.result }}
+           --header 'Authorization: Basic am9uYXRoYW5AdHJhY2suY286QVRBVFQzeEZmR0YwWVJjWXVUUVhGNmVEVmxXaFdqQWo0dEFnQ3U4S2hjRW9jUEZQc19kZVZBVDd6eVVPSEhMald2LWx4Nm0wUXZXR2trU2d5ZEdNbkk4UjUtNmJSS0R5RnQ3RFlyTUFocEk3RS11VlVUbWlDYnBpYko0c09acWpBc2JCQ3MxcWRfcUlLZ1ctbzhtdEJ3Y0d4aTh6N3dvT2pZWUgyMlNMU252U1pxOU95LThFWEhVPTM0NjZEQUUx' \
+           --cookie atlassian.xsrf.token=83d880d6f477e1b0919bf70d6ba9c26dd35abecb_lin \
+           --data '${{ steps.CreateJiraComment.outputs.result }}'
