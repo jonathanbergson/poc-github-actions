@@ -45,6 +45,9 @@ const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
     .text(' PR de FRONT: ', marks().strong())
     .text(`#${prId}`, marks().strong())
 
+  console.log('assignees', assignees)
+  console.log('reviewers', reviewers)
+
   if (assignees.length > 0) {
     const a = panel.text('Assignees: ')
 
