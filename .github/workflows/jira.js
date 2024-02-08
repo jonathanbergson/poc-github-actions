@@ -17,28 +17,30 @@ const getJiraCardNumberWithPrefix = (prTitle) => {
 
 const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
   const doc = new Document();
-  const panel = doc
-    .panel('info')
-    .paragraph()
+  const panel = doc.panel('info')
 
   panel
+    .paragraph()
     .emoji(':pushpin:')
-    .text(' PR de FRONT: \n', marks().strong())
+    .text(' PR de FRONT:', marks().strong())
+
+  panel.paragraph()
 
   if (assignees.length > 0) {
     panel
       .text('Assignees: ')
       .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+      .text('\n')
   }
 
   if (reviewers.length > 0) {
     panel
       .text('Reviewers: ')
       .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+      .text('\n')
   }
 
   panel
-    .text(' \n')
     .text('Link: ')
     .link(`https://github.com/Tracksale/cxm-app/pull/${prId}`, `https://github.com/Tracksale/cxm-app/pull/${prId}`)
 
