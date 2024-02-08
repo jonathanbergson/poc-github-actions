@@ -22,7 +22,9 @@ const pullRequestCreated = (prId) => {
     .panel('info')
     .paragraph()
     .text('Pull Request criado: \n\n')
-    .text('Assignees: @jonathanbergson \n')
+    .text('Assignees: ')
+    .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
+    .text(' \n')
     .text('Link: ')
     .link(`https://github.com/Tracksale/cxm-app/pull/${prId}`, `https://github.com/Tracksale/cxm-app/pull/${prId}`)
 
