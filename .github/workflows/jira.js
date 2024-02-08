@@ -1,8 +1,27 @@
 const { Document, marks } = require('adf-builder');
 
+const user = [
+  {
+    github: 'jonathanbergson',
+    jira: 'jonathanbergson',
+    jiraID: '6140cc7a54762c0069355ad7',
+    slack: 'jonathanbergson',
+  }
+]
+
 const createJiraCommentEndpoint = (prTitle) => {
   const cardNumber = getJiraCardNumberWithPrefix(prTitle);
   return `https://trackco.atlassian.net/rest/api/3/issue/${cardNumber}/comment`
+}
+
+const getJiraUserId = (githubUsername) => {
+  const user = user.find(u => u.github === githubUsername);
+  return user ? user.jiraID : '';
+}
+
+const getJiraUserMention = (githubUsername) => {
+  const user = user.find(u => u.github === githubUsername);
+  return user ? user.jira : '';
 }
 
 const getJiraCardNumber = (prTitle) => {
@@ -27,17 +46,29 @@ const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
   panel.paragraph()
 
   if (assignees.length > 0) {
-    panel
-      .text('Assignees: ')
-      .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
-      .text('\n')
+    const a = panel.text('Assignees: ')
+
+    assignees.forEach((assignee, index) => {
+      a.mention(getJiraUserId(assignee), getJiraUserMention(assignee))
+      if (index < assignees.length - 1) {
+        a.text(', ')
+      }
+    });
+
+    a.text('\n')
   }
 
   if (reviewers.length > 0) {
-    panel
-      .text('Reviewers: ')
-      .mention('6140cc7a54762c0069355ad7', 'jonathanbergson')
-      .text('\n')
+    const r = panel.text('Reviewers: ')
+
+    reviewers.forEach((reviewer, index) => {
+      r.mention(getJiraUserId(reviewer), getJiraUserMention(reviewer))
+      if (index < reviewers.length - 1) {
+        r.text(', ')
+      }
+    });
+
+    r.text('\n')
   }
 
   panel
