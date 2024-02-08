@@ -28,8 +28,8 @@ jobs:
         with:
          script: |
            const jira = require('./.github/workflows/jira.js');
-           const title = "${{ github.event.pull_request.title }}";
-           return jira.createJiraCommentEndpoint(title);
+           const prTitle = "${{ github.event.pull_request.title }}";
+           return jira.createJiraCommentEndpoint(prTitle);
 
       - name: Create Jira Comments
         uses: actions/github-script@v6
@@ -37,8 +37,8 @@ jobs:
         with:
          script: |
            const jira = require('./.github/workflows/jira.js');
-           const id = "${{ github.event.pull_request.id }}";
-           return jira.pullRequestCreated(id);
+           const prNumber = "${{ github.event.pull_request.number }}";
+           return jira.pullRequestCreated(prNumber);
 
       - name: Call Jira API
         run: |
