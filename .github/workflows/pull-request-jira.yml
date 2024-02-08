@@ -3,7 +3,7 @@ name: "PR: Jira Comments"
 on:
   pull_request:
     branches:
-      - *
+      - '*'
     types:
       - opened
       - reopened
