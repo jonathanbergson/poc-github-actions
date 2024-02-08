@@ -1,29 +1,50 @@
 name: "PR: Jira Comments"
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - *
+    types:
+      - opened
+      - reopened
 
 jobs:
   pull-request-open:
-   runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
 
-   steps:
-     - run: npm install adf-builder
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
 
-     - name: Create Jira Comments
-       uses: actions/github-script@v6
-       id: CreateJiraComment
-       with:
+      - run: npm install adf-builder
+
+      - name: Get Jira Card
+        uses: actions/github-script@v6
+        id: GetJiraCard
+        with:
+         script: |
+           const title = "${{ github.event.pull_request.title }}";
+           const jira = require('./.github/workflows/jira.js');
+           return jira.getJiraCardNumber(title);
+
+      - name: Create Jira Comments
+        uses: actions/github-script@v6
+        id: CreateJiraComment
+        with:
          script: |
            const jira = require('./.github/workflows/jira.js');
            return jira.pullRequestCreated();
 
-     - name: Call Jira API
-       run: |
-         curl \
-           --request POST \
-           --url 'https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment' \
-           --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
-           --header 'Accept: application/json' \
-           --header 'Content-Type: application/json' \
-           --data '{ "body": ${{ steps.CreateJiraComment.outputs.result }} }'
+      - name: Call Jira API
+        run: |
+          curl \
+            --request POST \
+            --url 'https://trackco.atlassian.net/rest/api/3/issue/${{ steps.GetJiraCard.outputs.result }}/comment' \
+            --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
+            --header 'Accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --data '{ "body": ${{ steps.CreateJiraComment.outputs.result }} }'
