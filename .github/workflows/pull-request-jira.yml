@@ -35,12 +35,29 @@ jobs:
         uses: actions/github-script@v6
         id: CreateJiraComment
         with:
-         script: |
-           const jira = require('./.github/workflows/jira.js');
-           const prNumber = ${{ github.event.pull_request.number }};
-           const prAssignees = ${{ github.event.pull_request.assignees }};
-           const prReviewers = ${{ github.event.pull_request.requested_reviewers }};
-           return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
+          script: |
+            const { repo, owner } = context.repo;
+            const jira = require('./.github/workflows/jira.js');
+            const prNumber = ${{ github.event.pull_request.number }};
+
+            try {
+              const pull = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: prNumber,
+              });
+              const prAssignees = pull.data.assignees.map(assignee => assignee.login);
+              const prReviewers = pull.data.requested_reviewers.map(reviewer => reviewer.login);
+
+              console.log('PR Number: ' + prNumber);
+              console.log('PR Assignees: ' + prAssignees);
+              console.log('PR Reviewers: ' + prReviewers);
+
+              return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
+            } catch (error) {
+              console.log('Error: ' + error);
+              return '';
+            }
 
       - name: Call Jira API
         run: |
