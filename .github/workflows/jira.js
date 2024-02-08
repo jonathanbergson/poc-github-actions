@@ -41,9 +41,8 @@ const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
   panel
     .paragraph()
     .emoji(':pushpin:')
-    .text(' PR de FRONT:', marks().strong())
-
-  panel.paragraph()
+    .text(' PR de FRONT: ', marks().strong())
+    .text(`#${prId}`, marks().strong())
 
   if (assignees.length > 0) {
     const a = panel.text('Assignees: ')
