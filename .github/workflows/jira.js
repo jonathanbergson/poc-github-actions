@@ -1,5 +1,15 @@
 const {Document} = require('adf-builder');
 
+const getJiraCardNumber = (prTitle) => {
+  let match = prTitle.match(/\((\S+)-(\d{4})\)/);
+  return match ? match[2] : null;
+}
+
+const getJiraCardNumberWithPrefix = (prTitle) => {
+  const prefix = 'CXM-';
+  return prefix + getJiraCardNumber(prTitle);
+}
+
 const pullRequestCreated = () => {
   const doc = new Document();
 
@@ -15,5 +25,7 @@ const pullRequestCreated = () => {
 };
 
 module.exports = {
+  getJiraCardNumber,
+  getJiraCardNumberWithPrefix,
   pullRequestCreated,
 };
