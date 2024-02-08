@@ -22,6 +22,8 @@ const pullRequestCreated = (prId) => {
     .panel('info')
     .paragraph()
     .text('Pull Request criado:')
+
+  doc
     .paragraph()
     .text('Assignees: @jonathanbergson \n')
     .text('Link: ')
