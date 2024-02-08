@@ -36,10 +36,11 @@ const getJiraCardNumberWithPrefix = (prTitle) => {
 
 const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
   const doc = new Document();
-  const panel = doc.panel('info')
+  const panel = doc
+    .panel('info')
+    .paragraph()
 
   panel
-    .paragraph()
     .emoji(':pushpin:')
     .text(' PR de FRONT: ', marks().strong())
     .text(`#${prId}`, marks().strong())
