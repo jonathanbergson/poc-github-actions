@@ -29,7 +29,7 @@ jobs:
          script: |
            const title = "${{ github.event.pull_request.title }}";
            const jira = require('./.github/workflows/jira.js');
-           return jira.getJiraCardNumberWithPrefix(title);
+           return jira.createJiraCommentEndpoint(title);
 
       - name: Create Jira Comments
         uses: actions/github-script@v6
@@ -43,7 +43,7 @@ jobs:
         run: |
           curl \
             --request POST \
-            --url 'https://trackco.atlassian.net/rest/api/3/issue/${{ steps.GetJiraCard.outputs.result }}/comment' \
+            --url ${{ steps.GetJiraCard.outputs.result }} \
             --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
             --header 'Accept: application/json' \
             --header 'Content-Type: application/json' \

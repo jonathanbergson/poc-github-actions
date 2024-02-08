@@ -50,7 +50,6 @@ const createPullRequestDescriptionLine = (item) => {
 }
 
 const createPullRequestDescription = (pulls = []) => {
-  console.log('pulls', pulls);
   let description = `## 🎉 Lista de demandas:\n\n`;
   const bugfix = [], hotfix = [], feat= [], tech = [], extra = [];
 
