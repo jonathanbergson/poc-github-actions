@@ -3,32 +3,35 @@ var { Document } = require('adf-builder');
 const pullRequestCreated = () => {
   const doc = new Document();
 
-  doc.paragraph()
-    .text('Here is some ')
-    .strong('bold test')
-    .text(' and ')
-    .em('text in italics')
-    .text(' as well as ')
-    .link(' a link', 'https://www.atlassian.com')
-    .text(' , emojis ')
-    .emoji(':smile:')
-    .emoji(':rofl:')
-    .emoji(':nerd:')
-    .text(' and some code: ')
-    .code('var i = 0;')
-    .text(' and a bullet list');
-  doc.bulletList()
-    .textItem('With one bullet point')
-    .textItem('And another');
+
   doc.panel("info")
     .paragraph()
-    .text("and an info panel with some text, with some more code below");
-  doc.codeBlock("javascript")
-    .text('var i = 0;\nwhile(true) {\n  i++;\n}');
+    .text("Pull Request criado: \n")
+    .text("Assignees: @jonathanbergson \n")
+    .text("Link: ")
+    .link("https://github.com/Tracksale/cxm-app/pull/1507")
 
-  const bodyJson = doc.toJSON();
-  console.log(bodyJson);
-  return bodyJson;
+  // doc.paragraph()
+  //   .text('Here is some ')
+  //   .strong('bold test')
+  //   .text(' and ')
+  //   .em('text in italics')
+  //   .text(' as well as ')
+  //   .link(' a link', 'https://www.atlassian.com')
+  //   .text(' , emojis ')
+  //   .emoji(':smile:')
+  //   .emoji(':rofl:')
+  //   .emoji(':nerd:')
+  //   .text(' and some code: ')
+  //   .code('var i = 0;')
+  //   .text(' and a bullet list');
+  // doc.bulletList()
+  //   .textItem('With one bullet point')
+  //   .textItem('And another');
+  // doc.codeBlock("javascript")
+  //   .text('var i = 0;\nwhile(true) {\n  i++;\n}');
+
+  return doc.toJSON();
 };
 
 module.exports = {

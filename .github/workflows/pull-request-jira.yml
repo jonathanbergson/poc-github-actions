@@ -16,9 +16,18 @@ jobs:
 
      - run: npm install adf-builder
 
-     - name: Jira Comments
+     - name: Create Jira Comments
        uses: actions/github-script@v6
        with:
          script: |
            const jira = require('./.github/workflows/jira.js');
-           jira.pullRequestCreated();
+           return jira.pullRequestCreated();
+
+     - name: Call Jira API
+       run: |
+         curl \
+           --request POST \
+           --header 'Content-Type: application/json' \
+           --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
+           --url 'https://trackco.atlassian.net/rest/api/3/issue/CXM-4065/comment'
+           --data-raw '{ "body": "${{ steps.CreateJiraComment.outputs.result }}" }'
