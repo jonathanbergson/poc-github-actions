@@ -1,6 +1,6 @@
 const { Document, marks } = require('adf-builder');
 
-const user = [
+const users = [
   {
     github: 'jonathanbergson',
     jira: 'jonathanbergson',
@@ -15,12 +15,12 @@ const createJiraCommentEndpoint = (prTitle) => {
 }
 
 const getJiraUserId = (githubUsername) => {
-  const user = user.find(u => u.github === githubUsername);
+  const user = users.find(u => u.github === githubUsername);
   return user ? user.jiraID : '';
 }
 
 const getJiraUserMention = (githubUsername) => {
-  const user = user.find(u => u.github === githubUsername);
+  const user = users.find(u => u.github === githubUsername);
   return user ? user.jira : '';
 }
 
@@ -44,6 +44,7 @@ const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
     .emoji(':pushpin:')
     .text(' PR de FRONT: ', marks().strong())
     .text(`#${prId}`, marks().strong())
+    .text('\n\n')
 
   console.log('assignees', assignees)
   console.log('reviewers', reviewers)
