@@ -27,8 +27,8 @@ jobs:
         id: GetJiraCard
         with:
          script: |
-           const title = "${{ github.event.pull_request.title }}";
            const jira = require('./.github/workflows/jira.js');
+           const title = "${{ github.event.pull_request.title }}";
            return jira.createJiraCommentEndpoint(title);
 
       - name: Create Jira Comments
@@ -37,7 +37,8 @@ jobs:
         with:
          script: |
            const jira = require('./.github/workflows/jira.js');
-           return jira.pullRequestCreated();
+           const id = "${{ github.event.pull_request.id }}";
+           return jira.pullRequestCreated(id);
 
       - name: Call Jira API
         run: |
