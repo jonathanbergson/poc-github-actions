@@ -71,7 +71,7 @@ jobs:
           payload: |
             {
               "link": "${{ github.event.pull_request.html_url }}",
-              "id": "${{ github.event.pull_request.id }}"
+              "id": "${{ github.event.pull_request.number }}",
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_PR_OPENED }}
