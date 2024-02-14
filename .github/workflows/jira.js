@@ -9,7 +9,17 @@ const users = [
   }
 ]
 
-const createJiraCommentEndpoint = (prTitle) => {
+const getJiraCardNumber = (prTitle) => {
+  let match = prTitle.match(/\((\S+)-(\d{4})\)/);
+  return match ? match[2] : null;
+}
+
+const getJiraCardNumberWithPrefix = (prTitle) => {
+  const prefix = 'CXM-';
+  return prefix + getJiraCardNumber(prTitle);
+}
+
+const getJiraEndpointComment = (prTitle) => {
   const cardNumber = getJiraCardNumberWithPrefix(prTitle);
   return `https://trackco.atlassian.net/rest/api/3/issue/${cardNumber}/comment`
 }
@@ -24,17 +34,7 @@ const getJiraUserMention = (githubUsername) => {
   return user ? user.jira : '';
 }
 
-const getJiraCardNumber = (prTitle) => {
-  let match = prTitle.match(/\((\S+)-(\d{4})\)/);
-  return match ? match[2] : null;
-}
-
-const getJiraCardNumberWithPrefix = (prTitle) => {
-  const prefix = 'CXM-';
-  return prefix + getJiraCardNumber(prTitle);
-}
-
-const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
+const createMessagePullRequestOpened = (prId, assignees = [], reviewers = []) => {
   const doc = new Document();
   const panel = doc
     .panel('info')
@@ -83,8 +83,8 @@ const pullRequestCreated = (prId, assignees = [], reviewers = []) => {
 };
 
 module.exports = {
-  createJiraCommentEndpoint,
+  createMessagePullRequestOpened,
   getJiraCardNumber,
   getJiraCardNumberWithPrefix,
-  pullRequestCreated,
+  getJiraEndpointComment,
 };

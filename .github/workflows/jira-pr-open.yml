@@ -12,8 +12,24 @@ jobs:
   jira-pr-open:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ ubuntu-latest ]
 
     steps:
+      - name: Is Task
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prTitle = "${{ github.event.pull_request.title }}";
+            const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
+
+            if (regexTasks.test(prTitle) === false) {
+              core.setFailed("Skip Jira API. This is not a task PR.");
+            }
+
+
       - name: Checkout Repo
         uses: actions/checkout@v3
         with:
@@ -26,10 +42,10 @@ jobs:
         uses: actions/github-script@v6
         id: GetJiraCard
         with:
-         script: |
-           const jira = require('./.github/workflows/jira.js');
-           const prTitle = "${{ github.event.pull_request.title }}";
-           return jira.createJiraCommentEndpoint(prTitle);
+          script: |
+            const jira = require('./.github/workflows/jira.js');
+            const prTitle = "${{ github.event.pull_request.title }}";
+            return jira.getJiraEndpointComment(prTitle);
 
       - name: Create Jira Comments
         uses: actions/github-script@v6
@@ -49,7 +65,7 @@ jobs:
               const prAssignees = pull.data.assignees.map(assignee => assignee.login);
               const prReviewers = pull.data.requested_reviewers.map(reviewer => reviewer.login);
 
-              return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
+              return jira.createMessagePullRequestOpened(prNumber, prAssignees, prReviewers);
             } catch (error) {
               console.log('Error: ' + error);
               return '';
