@@ -26,7 +26,6 @@ jobs:
             const regexTasks = /^(bugfix|feat|hotfix|tech)\(CXM-?\d{0,4}\): .+$/;
 
             if (regexTasks.test(prTitle) === false) {
-#              core.setFailed("Skip Jira API. This is not a task PR.");
               core.cancelWorkflow("Skip Jira API. This is not a task PR.");
             }
 
