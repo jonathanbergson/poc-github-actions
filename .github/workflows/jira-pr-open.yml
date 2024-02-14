@@ -70,10 +70,8 @@ jobs:
         with:
           payload: |
             {
-              "id": "${{ github.event.pull_request.id }}",
-              "link": "${{ github.event.pull_request.html_url }}",
-              "assignees": "",
-              "reviewers": ""
+              "version": "${{ steps.CreateReleasePR.outputs.version }}",
+              "link": "${{ github.event.pull_request.html_url }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_PR_OPENED }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
