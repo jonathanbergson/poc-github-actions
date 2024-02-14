@@ -70,8 +70,8 @@ jobs:
         with:
           payload: |
             {
-              "version": "${{ github.event.pull_request.title }}",
-              "link": "${{ github.event.pull_request.html_url }}"
+              "link": "${{ github.event.pull_request.html_url }}",
+              "id": "${{ github.event.pull_request.id }}",
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_PR_OPENED }}
