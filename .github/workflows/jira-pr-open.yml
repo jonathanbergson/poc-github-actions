@@ -14,56 +14,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v3
-#        with:
-#          ref: main
-#          fetch-depth: 0
-#
-#      - run: npm install adf-builder
-#
-#      - name: Get Jira Card
-#        uses: actions/github-script@v6
-#        id: GetJiraCard
-#        with:
-#         script: |
-#           const jira = require('./.github/workflows/jira.js');
-#           const prTitle = "${{ github.event.pull_request.title }}";
-#           return jira.createJiraCommentEndpoint(prTitle);
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
 
-#      - name: Create Jira Comments
-#        uses: actions/github-script@v6
-#        id: CreateJiraComment
-#        with:
-#          script: |
-#            const { repo, owner } = context.repo;
-#            const jira = require('./.github/workflows/jira.js');
-#            const prNumber = ${{ github.event.pull_request.number }};
-#
-#            try {
-#              const pull = await github.rest.pulls.get({
-#                owner,
-#                repo,
-#                pull_number: prNumber,
-#              });
-#              const prAssignees = pull.data.assignees.map(assignee => assignee.login);
-#              const prReviewers = pull.data.requested_reviewers.map(reviewer => reviewer.login);
-#
-#              return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
-#            } catch (error) {
-#              console.log('Error: ' + error);
-#              return '';
-#            }
+      - run: npm install adf-builder
 
-#      - name: Call Jira API
-#        run: |
-#          curl \
-#            --request POST \
-#            --url ${{ steps.GetJiraCard.outputs.result }} \
-#            --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
-#            --header 'Accept: application/json' \
-#            --header 'Content-Type: application/json' \
-#            --data '{ "body": ${{ steps.CreateJiraComment.outputs.result }} }'
+      - name: Get Jira Card
+        uses: actions/github-script@v6
+        id: GetJiraCard
+        with:
+         script: |
+           const jira = require('./.github/workflows/jira.js');
+           const prTitle = "${{ github.event.pull_request.title }}";
+           return jira.createJiraCommentEndpoint(prTitle);
+
+      - name: Create Jira Comments
+        uses: actions/github-script@v6
+        id: CreateJiraComment
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const jira = require('./.github/workflows/jira.js');
+            const prNumber = ${{ github.event.pull_request.number }};
+
+            try {
+              const pull = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: prNumber,
+              });
+              const prAssignees = pull.data.assignees.map(assignee => assignee.login);
+              const prReviewers = pull.data.requested_reviewers.map(reviewer => reviewer.login);
+
+              return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
+            } catch (error) {
+              console.log('Error: ' + error);
+              return '';
+            }
+
+      - name: Call Jira API
+        run: |
+          curl \
+            --request POST \
+            --url ${{ steps.GetJiraCard.outputs.result }} \
+            --user ${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }} \
+            --header 'Accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --data '{ "body": ${{ steps.CreateJiraComment.outputs.result }} }'
 
       - name: Send Slack message
         uses: slackapi/slack-github-action@v1.24.0

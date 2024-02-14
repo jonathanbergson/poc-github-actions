@@ -1,15 +1,14 @@
-name: "PR: Jira Comments"
+name: "Jira: Pull Request Approved"
 
 on:
   pull_request:
     branches:
       - '*'
     types:
-      - opened
-      - reopened
+      - approved
 
 jobs:
-  pull-request-open:
+  jira-pr-approved:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
 
@@ -48,10 +47,6 @@ jobs:
               });
               const prAssignees = pull.data.assignees.map(assignee => assignee.login);
               const prReviewers = pull.data.requested_reviewers.map(reviewer => reviewer.login);
-
-              console.log('PR Number: ' + prNumber);
-              console.log('PR Assignees: ' + prAssignees);
-              console.log('PR Reviewers: ' + prReviewers);
 
               return jira.pullRequestCreated(prNumber, prAssignees, prReviewers);
             } catch (error) {
